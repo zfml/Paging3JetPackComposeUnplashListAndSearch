@@ -51,24 +51,41 @@ fun ListContent(
     items: LazyPagingItems<UnsplashImage>
 ) {
 
+    Box(modifier = Modifier.fillMaxSize()) {
 
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
+        if(items.loadState.refresh is LoadState.Loading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        } else {
+            LazyColumn(
+                modifier = modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-        items(
-            items = items,
-            key = { unsplashImage -> unsplashImage.id }
-        ) {  unsplashImage ->
-             unsplashImage?.let { UnsplashItem(unsplashImage = it) }
-        }
-        item {
-                if(items.loadState.append is LoadState.Loading) {
-                CircularProgressIndicator()
+                items(
+                    items = items,
+                    key = { unsplashImage -> unsplashImage.id }
+                ) {  unsplashImage ->
+                    unsplashImage?.let { UnsplashItem(unsplashImage = it) }
+
+                }
+
+                item {
+                    if(items.loadState.append is LoadState.Loading) {
+                        CircularProgressIndicator()
+                        Log.d("endOfPage","CircleProgressIndicator")
+
+                    }
+                }
             }
         }
+
+
     }
+
+
 
 }
 
